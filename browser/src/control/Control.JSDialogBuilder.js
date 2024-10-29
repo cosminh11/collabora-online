@@ -2375,7 +2375,13 @@ L.Control.JSDialogBuilder = L.Control.extend({
 			if (data.command) {
 				var updateFunction = function() {
 					var items = builder.map['stateChangeHandler'];
-					var state = items.getItemValue(data.command);
+					var command = data.command;
+					if (command === '.uno:SidebarDeck.PropertyDeck') {
+						command = '.uno:Sidebar';
+					} else if (command === '.uno:Navigator') {
+						command = '.uno:SidebarDeck.NavigatorDeck';
+					}
+					var state = items.getItemValue(command);
 
 					if (state && state === 'true') {
 						$(button).addClass('selected');
@@ -2396,7 +2402,11 @@ L.Control.JSDialogBuilder = L.Control.extend({
 
 				builder.map.on('commandstatechanged', function(e) {
 					disabled = false;
-					if (e.commandName === data.command)
+					var sidebar = (e.commandName === '.uno:Sidebar' && data.command === '.uno:SidebarDeck.PropertyDeck');
+					var navigator = (e.commandName === '.uno:SidebarDeck.NavigatorDeck' && data.command === '.uno:Navigator');
+					if (e.commandName === data.command
+					    || sidebar
+					    || navigator)
 					{
 						// in some cases we will get both property like state and disabled
 						// to handle it we will set disable var based on INCOMING info (ex: .uno:ParaRightToLft)

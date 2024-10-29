@@ -1729,6 +1729,12 @@ L.Control.Menubar = L.Control.extend({
 					var constPageHeader = '.uno:InsertPageHeader';
 					var constPageFooter = '.uno:InsertPageFooter';
 					var unoCommand = $(aItem).data(constUno);
+					if (unoCommand === '.uno:SidebarDeck.PropertyDeck') {
+						unoCommand = '.uno:Sidebar';
+					}
+					if (unoCommand === '.uno:Navigator') {
+						unoCommand = '.uno:SidebarDeck.NavigatorDeck';
+					}
 					var itemState = self._map[constState].getItemValue(unoCommand);
 					if (itemState === 'disabled') {
 						if (unoCommand.startsWith('.uno:Paste')) {
